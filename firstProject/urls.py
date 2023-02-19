@@ -18,12 +18,12 @@ from django.contrib import admin
 from django.urls import path
 
 from firstProject import settings
-from numizoomi.views import index, pageNotFound,pageForbidden,pageBadRequest,pageInternalServerError
+from numizoomi.views import index, pageNotFound,pageForbidden, pageBadRequest, pageInternalServerError
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('umizoomi/', include('umizoomi.urls')),
+    path('numizoomi/', include('numizoomi.urls')),
 ]
 
 if settings.DEBUG:
