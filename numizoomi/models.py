@@ -1,4 +1,6 @@
 from django.db import models
+from django.urls import reverse
+
 
 class Money(models.Model):
     title=models.CharField(max_length=255)
@@ -17,9 +19,26 @@ class Money(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def ___str___(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('money', kwargs={'money_id':self.pk})
+
+    class Meta:
+        verbose_name_plural= 'Монеты'
+
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    money_id = models.ForeignKey(
-        'Money',
-        on_delete=models.CASCADE,
-    )
+
+
+    def ___str___(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'cat_id':self.pk})
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+        ordering = ['id']
