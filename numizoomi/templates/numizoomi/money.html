@@ -1,0 +1,11 @@
+{% extends 'numizoomi/layout.html' %}
+
+{% block content %}
+<h1>{{money.title}}</h1>
+
+{% if money.photo %}
+<p><img class="img-article-left" src="{{post.photo.url}}"></p>
+{% endif %}
+
+{{money.description|linebreaks}}
+{% endblock %}

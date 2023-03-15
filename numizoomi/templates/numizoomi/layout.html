@@ -23,10 +23,10 @@
     <link rel="stylesheet" href="{% static 'numizoomi/plugins/animate/animate.css' %}">
     <!-- Slick Carousel -->
     <link rel="stylesheet" href="{% static 'numizoomi/plugins/slick/slick.css' %}">
-    <link rel="stylesheet" href="{% static 'numizoomi/plugins/slick/slick-theme.css' %}">
+    <link rel="stylesheet" href='{% static "numizoomi/plugins/slick/slick-theme.css" %}'>
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="{% static 'numizoomi/css/style.css' %}">
+    <link rel="stylesheet" href='{% static "numizoomi/css/style.css" %}'>
 
 </head>
 <body id="body">
@@ -87,7 +87,7 @@
 
                     <!-- Home -->
                     <li class="dropdown ">
-                        <a href="#">Главная страница</a>
+                        <a href="{% url 'home' %}">Главная страница</a>
                     </li><!-- / Home -->
 
 
@@ -112,6 +112,10 @@
                             </div><!-- / .row -->
                         </div><!-- / .dropdown-menu -->
                     </li><!-- / Elements -->
+                    <li class="dropdown ">
+                        <a href="{% url 'add_money' %}">Добавить монеты</a>
+                    </li><!-- / Home -->
+
 
                 </ul><!-- / .nav .navbar-nav -->
 
@@ -147,7 +151,7 @@
                         </a>
                     </li>
                 </ul>
-                <p class="copyright-text">Copyright &copy;2022, Designed &amp; Developed by <a href="https://themefisher.com/">Diana Danial</a></p>
+                <p class="copyright-text">Copyright &copy;2022, Designed &amp; Developed by <a href="https://themefisher.com/">Django</a></p>
             </div>
         </div>
     </div>
