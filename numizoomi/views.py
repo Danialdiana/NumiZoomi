@@ -6,20 +6,21 @@ from django.views.generic import ListView, CreateView, DetailView
 
 from .forms import AddPostForm
 from .models import *
-
+from .utils import DataMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
-class MoneyHome(ListView):
+class MoneyHome(DataMixin, ListView):
+
     model = Money
     template_name = 'numizoomi/index.html'
     context_object_name = 'posts'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Главная страница'
-        context['cat_selected'] = 0
-        return context
+        c_def = self.get_user_context(title = 'Главная страница')
+        return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
         return Money.objects.filter(is_published=True)
@@ -35,7 +36,7 @@ class MoneyHome(ListView):
 #
 #     return render(request, 'numizoomi/index.html', context=context)
 
-class ShowPost(DetailView):
+class ShowPost(DataMixin, DetailView):
     model = Money
     template_name = 'numizoomi/money.html'
     slug_url_kwarg = 'money_slug'
@@ -43,8 +44,8 @@ class ShowPost(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = context['money']
-        return context
+        c_def = self.get_user_context(title=context['money'])
+        return dict(list(context.items()) + list(c_def.items()))
 
 # def show_money(request, money_slug):
 #     money = get_object_or_404(Money, slug=money_slug)
@@ -59,7 +60,7 @@ class ShowPost(DetailView):
 
     # return HttpResponse(f"Отображение монеты с id = {money_id}")
 
-class MoneyCategory(ListView):
+class MoneyCategory(DataMixin, ListView):
     model = Money
     template_name = 'numizoomi/index.html'
     context_object_name = 'moneys'
@@ -70,9 +71,9 @@ class MoneyCategory(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Категория - ' + str(context['moneys'][0].category_id)
-        context['category_selected'] = context['moneys'][0].category_id
-        return context
+        c_def = self.get_user_context(title='Категория - ' + str(context['moneys'][0].category_id), cat_selected= context['moneys'][0].category_id)
+        return dict(list(context.items()) + list(c_def.items()))
+
 
 
 # def show_category(request, cat_id):
@@ -89,15 +90,16 @@ class MoneyCategory(ListView):
 #
 #     return render(request, 'numizoomi/index.html', context=context)
 
-class AddMoney(CreateView):
+class AddMoney(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'numizoomi/addmoney.html'
     success_url = reverse_lazy('home')
+    login_url = '/admin/'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Добавить монет'
-        return context
+        c_def = self.get_user_context(title='Добавить монет')
+        return dict(list(context.items()) + list(c_def.items()))
 
 # def addmoney(request):
 #     if request.method == 'POST':

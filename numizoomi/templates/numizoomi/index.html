@@ -1,15 +1,14 @@
 {% extends 'numizoomi/layout.html' %}
 {% load static %}
 
-
-<h1>{{title}}</h1>
+{% block content %}
 <div class="container ">
         <div class="row justify-content-center">
             <div class="col-md-12">
                     <h1 class="text-center"><strong>Главная страница</strong></h1>
                     <div class="container py-5">
                         <div class="row">
-							{% block content %}
+
 							{% for p in posts %}
 								<div class="col-lg-4 col-md-12 mb-5" >
                                     <div class="card justify-content-center">
