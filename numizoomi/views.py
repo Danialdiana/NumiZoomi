@@ -4,8 +4,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidde
     HttpResponseServerError, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView
-
+from django.views.generic import ListView, CreateView, DetailView, FormView
 
 from .forms import *
 from .models import *
@@ -159,3 +158,18 @@ class LoginUser(DataMixin, LoginView):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
+class ContactFormView(DataMixin, FormView):
+    form_class = ContactForm
+    template_name = 'numizoomi/contact.html'
+    success_url = reverse_lazy('home')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Обратная связь")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return redirect('home')
