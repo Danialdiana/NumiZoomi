@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "debug_toolbar",
     'captcha',
-    'numizoomi.apps.NumizoomiConfig'
+    'numizoomi.apps.NumizoomiConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -138,5 +139,12 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(BASE_DIR, 'firstProject_cache'),
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
 }
 

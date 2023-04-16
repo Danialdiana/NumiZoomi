@@ -1,13 +1,18 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
+from django.forms import model_to_dict
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden, HttpResponseBadRequest, \
     HttpResponseServerError, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, FormView
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .forms import *
 from .models import *
+from .serializers import MoneySerializer
 from .utils import DataMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -173,3 +178,58 @@ class ContactFormView(DataMixin, FormView):
     def form_valid(self, form):
         print(form.cleaned_data)
         return redirect('home')
+
+class MoneyAPIList(generics.ListCreateAPIView):
+    queryset = Money.objects.all()
+    serializer_class = MoneySerializer
+
+
+class MoneyAPIUpdate(generics.UpdateAPIView):
+    queryset = Money.objects.all()
+    serializer_class = MoneySerializer
+
+
+class MoneyAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Money.objects.all()
+    serializer_class = MoneySerializer
+
+
+# class MoneyAPIView(APIView):
+#     def get(self, request):
+#         w = Money.objects.all()
+#         return Response({'moneys': MoneySerializer(w, many=True).data})
+#
+#     def post(self, request):
+#         serializer = MoneySerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#
+#         return Response({'money': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method PUT not allowed"})
+#
+#         try:
+#             instance = Money.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Object does not exists"})
+#
+#         serializer = MoneySerializer(data=request.data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({"money": serializer.data})
+#
+#     def delete(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method DELETE not allowed"})
+#
+#
+#         return Response({"post": "delete money " + str(pk)})
+
+
+class MoneyAPIView(generics.ListAPIView):
+    queryset = Money.objects.all()
+    serializer_class = MoneySerializer

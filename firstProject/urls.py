@@ -18,13 +18,17 @@ from django.contrib import admin
 from django.urls import path
 
 from firstProject import settings
-from numizoomi.views import pageNotFound,pageForbidden, pageBadRequest, pageInternalServerError
+from numizoomi.views import pageNotFound, pageForbidden, pageBadRequest, pageInternalServerError, MoneyAPIView, \
+    MoneyAPIUpdate, MoneyAPIDetailView
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('captcha/', include('captcha.urls')),
     path('', include('numizoomi.urls')),
+    path('api/v1/moneylist/', MoneyAPIView.as_view()),
+    path('api/v1/moneylist/<int:pk>/', MoneyAPIUpdate.as_view()),
+    path('api/v1/moneydetail/<int:pk>/', MoneyAPIDetailView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
