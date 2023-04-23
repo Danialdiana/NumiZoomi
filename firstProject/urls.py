@@ -16,19 +16,37 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
+from rest_framework import routers
 
 from firstProject import settings
 from numizoomi.views import pageNotFound, pageForbidden, pageBadRequest, pageInternalServerError, MoneyAPIView, \
-    MoneyAPIUpdate, MoneyAPIDetailView
+    MoneyViewSet
 from django.urls import path, include
+
+class MyCustomRouter(routers.SimpleRouter):
+    routes = [
+        routers.Route(url=r'^{prefix}$',
+                      mapping={'get': 'list'},
+                      name='{basename}-list',
+                      detail=False,
+                      initkwargs={'suffix': 'List'}),
+        routers.Route(url=r'^{prefix}/{lookup}$',
+                      mapping={'get': 'retrieve'},
+                      name='{basename}-detail',
+                      detail=True,
+                      initkwargs={'suffix': 'Detail'})
+    ]
+
+router = MyCustomRouter
+router.register(r'money', MoneyViewSet, basename='money')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('captcha/', include('captcha.urls')),
     path('', include('numizoomi.urls')),
-    path('api/v1/moneylist/', MoneyAPIView.as_view()),
-    path('api/v1/moneylist/<int:pk>/', MoneyAPIUpdate.as_view()),
-    path('api/v1/moneydetail/<int:pk>/', MoneyAPIDetailView.as_view()),
+    path('api/v1/', include(router.urls))
+    # path('api/v1/moneylist/', MoneyViewSet.as_view({'get': 'list'})),
+    # path('api/v1/moneylist/<int:pk>/', MoneyViewSet.as_view({'put': 'update'})),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

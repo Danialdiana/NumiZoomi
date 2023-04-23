@@ -6,12 +6,15 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidde
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, FormView
-from rest_framework import generics
+from rest_framework import generics, viewsets, mixins
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from .forms import *
 from .models import *
+from .permissions import IsOwnerOrReadOnly, IsAdminOrReadOnly
 from .serializers import MoneySerializer
 from .utils import DataMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -179,6 +182,27 @@ class ContactFormView(DataMixin, FormView):
         print(form.cleaned_data)
         return redirect('home')
 
+
+class MoneyViewSet(mixins.CreateModelMixin,
+                   mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   mixins.ListModelMixin,
+                   GenericViewSet):
+    serializer_class = MoneySerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get("pk")
+
+        if not pk:
+            return Money.objects.all()[:3]
+
+        return Money.objescts.filter(pk=pk)
+
+    @action(method=['get'], detail=False)
+    def category(self, request, pk=None):
+        cats = Category.objects.get(pk=pk)
+        return Response({'cats': cats.name})
+
 class MoneyAPIList(generics.ListCreateAPIView):
     queryset = Money.objects.all()
     serializer_class = MoneySerializer
@@ -187,11 +211,13 @@ class MoneyAPIList(generics.ListCreateAPIView):
 class MoneyAPIUpdate(generics.UpdateAPIView):
     queryset = Money.objects.all()
     serializer_class = MoneySerializer
+    permission_classes = (IsOwnerOrReadOnly,)
 
 
 class MoneyAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Money.objects.all()
     serializer_class = MoneySerializer
+    permission_classes = (IsAdminOrReadOnly,)
 
 
 # class MoneyAPIView(APIView):

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
@@ -15,10 +16,8 @@ class Money(models.Model):
     time_update=models.DateTimeField(auto_now=True, verbose_name="Время изменения")
     is_published=models.BooleanField(default=True, verbose_name="Публикация")
     image=models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name="Фото")
-    category_id=models.ForeignKey(
-        'Category',
-        on_delete=models.PROTECT, verbose_name="Категории"
-    )
+    category_id=models.ForeignKey('Category',on_delete=models.PROTECT, verbose_name="Категории")
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
 
     def ___str___(self):
         return self.title
