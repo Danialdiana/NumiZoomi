@@ -5,26 +5,24 @@
 <div class="container ">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                    <h1 class="text-center"><strong>Главная страница</strong></h1>
+                    <h1 class="text-center mb-5"><strong>Главная страница</strong></h1>
                     <div class="container py-5">
                         <div class="row">
-
 							{% for p in posts %}
 								<div class="col-lg-4 col-md-12 mb-5" >
                                     <div class="card justify-content-center">
-										{% if p.photo %}
+										{% if p.image %}
                                         <div class="bg-image hover-overlay ripple mx-auto" data-mdb-ripple-color="light">
-                                            <img src="{{p.photo.url}}"  height="100px" />
+                                            <img src="{{p.image.url}}"  height="150px" width="150px" style="margin-left:90px;"/>
                                         </div>
 										{% endif %}
-                                        <div class="card-body" style="height: 200px;">
+                                        <div class="card-body" style="height: 150px;">
                                             <h4 class="card-title text-center">{{p.title}}</h4>
                                             <p class="card-text">	{% autoescape on %} {{p.description|linebreaks|truncatewords:50}} {% endautoescape %}</p>
-                                            <h4 class="card-text text-center mt-5">{{p.price}} T</h4>
-											<p class="first">Категория: {{p.category.name}}</p>
+                                            <h3 class="card-text text-center mt-5">{{p.price}} T</h3>
                                         </div>
 										<div class="card-footer" style="display: flex;justify-content:space-between;">
-										<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Подробнее</a></p>
+										<p class="link-read-post btn btn-main pull-right mb-3" style="margin-left:90px;"><a href="{{ p.get_absolute_url }}" style="color:white;">Подробнее</a></p>
 										</div>
                                     </div>
                                 </div>

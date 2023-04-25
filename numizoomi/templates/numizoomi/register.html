@@ -1,21 +1,25 @@
 {% extends 'numizoomi/layout.html' %}
 
 {% block content %}
-<div class="container ">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h1>{{title}}</h1>
+ <div class="container mt-5 mb-4">
+        <div class="row" style="display: flex;justify-content:center;">
+            <div class="col-md-6 mt-5 mb-5">
+                <h2 class="text-center mb-3">{{title}}</h2>
+                <form method="POST">
+                {% csrf_token %}
+                     <div class="form-error">{{ form.non_field_errors }}</div>
 
-                    <form method="post">
-                     {% csrf_token %}
-                        {% for f in form %}
-                        <p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
-                        <div class="form-error">{{ f.errors }}</div>
-                        {% endfor %}
-
-                    <button type="submit" class="btn btn-primary">Регистрация</button>
-                    </form>
-	        </div>
-		</div>
-</div>
+                {% for f in form %}
+                    <div class="row mb-3">
+                        <div class="form-group mt-2 col-6 mx-auto">
+                            <label for="{{ f.id_for_label }}" class="col-form-label ">{{f.label}}:</label>{{f}}
+                            <div class="form-error">{{ f.errors }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+                    <button type="submit" class="btn btn-main pull-right mb-3">Регистрация</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

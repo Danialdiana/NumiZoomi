@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('time_create', models.DateTimeField(auto_now_add=True)),
                 ('time_update', models.DateTimeField(auto_now=True)),
                 ('is_published', models.BooleanField(default=True)),
-                ('image', models.ImageField(upload_to='photos/%Y/%m/%d/')),
+                ('image', models.ImageField(upload_to='images/%Y/%m/%d/')),
                 ('category_id', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='numizoomi.category')),
             ],
             options={

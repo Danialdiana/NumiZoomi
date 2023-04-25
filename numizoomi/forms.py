@@ -14,7 +14,7 @@ class AddPostForm(forms.ModelForm):
 
     class Meta:
         model = Money
-        fields = ['title', 'slug', 'description', 'country', 'year', 'count', 'price', 'metal', 'image', 'is_published', 'category_id']
+        fields = ['title', 'slug', 'description', 'country', 'year', 'count', 'price', 'metal', 'image', 'is_published', 'category_id','user']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'slug': forms.TextInput(attrs={'class': 'form-control'}),

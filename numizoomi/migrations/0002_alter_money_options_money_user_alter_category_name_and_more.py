@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='money',
             name='image',
-            field=models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фото'),
+            field=models.ImageField(upload_to='images/%Y/%m/%d/', verbose_name='Фото'),
         ),
         migrations.AlterField(
             model_name='money',

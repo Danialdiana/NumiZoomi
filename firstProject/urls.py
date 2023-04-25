@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from rest_framework import routers
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from firstProject import settings
 from numizoomi.views import pageNotFound, pageForbidden, pageBadRequest, pageInternalServerError, MoneyAPIView, \
@@ -37,16 +38,22 @@ class MyCustomRouter(routers.SimpleRouter):
                       initkwargs={'suffix': 'Detail'})
     ]
 
-router = MyCustomRouter
-router.register(r'money', MoneyViewSet, basename='money')
+# router = MyCustomRouter
+# router.register(r'money', MoneyViewSet, basename='money')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('captcha/', include('captcha.urls')),
     path('', include('numizoomi.urls')),
-    path('api/v1/', include(router.urls))
-    # path('api/v1/moneylist/', MoneyViewSet.as_view({'get': 'list'})),
-    # path('api/v1/moneylist/<int:pk>/', MoneyViewSet.as_view({'put': 'update'})),
+    # path('api/v1/', include(router.urls))
+    path('api/v1/drf-auth/', include('rest_framework.urls')),
+    path('api/v1/moneylist/', MoneyViewSet.as_view({'get': 'list'})),
+    path('api/v1/moneylist/<int:pk>/', MoneyViewSet.as_view({'put': 'update'})),
+    path('api/v1/auth/', include('djoser.urls')),
+    re_path(r'^auth', include('djoser.urls.authtoken')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

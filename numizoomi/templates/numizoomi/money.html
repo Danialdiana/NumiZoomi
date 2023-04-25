@@ -1,11 +1,35 @@
 {% extends 'numizoomi/layout.html' %}
 
 {% block content %}
-<h1>{{money.title}}</h1>
-
-{% if money.photo %}
-<p><img class="img-article-left" src="{{post.photo.url}}"></p>
-{% endif %}
-
-{{money.description|linebreaks}}
+<<div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                    <div class=" container py-3">
+                    <div class="row ">
+                        <div class="row g-0">
+                                <div class="col-md-4 m-xl-3">
+                                    {% if money.image %}
+                                            <img src="{{money.image.url}}"   width="100%" height="300px"  class="img-fluid rounded-start"/>
+										{% endif %}
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h1 class="card-title text-center">{{money.title}} </h1>
+                                        <p class="card-text mt-3">{{money.description}}</p>
+                                        <h2 class="card-text text-center m-5">{{money.price}} T</h2>
+                                        <h5 class="card-text text-muted">Страна:________________________________________<b>{{money.country}}</b></h5>
+                                        <h5 class="card-text text-muted">Год:___________________________________________<b>{{money.year}}</b></h5>
+                                        <h5 class="card-text text-muted">Металл:________________________________________<b>{{money.metal}}</b></h5>
+                                        <h5 class="card-text text-muted">Количества:______________________________________<b>{{money.count}}</b></h5>
+                                    </div>
+                                </div>
+                            <div class="card-footer justify-content-around">
+                                <a href="{% url 'home' %}" class="btn btn-main pull-right mb-3">Главная страница</a>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+</div>
 {% endblock %}

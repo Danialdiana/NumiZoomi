@@ -15,9 +15,14 @@ class Money(models.Model):
     time_create=models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
     time_update=models.DateTimeField(auto_now=True, verbose_name="Время изменения")
     is_published=models.BooleanField(default=True, verbose_name="Публикация")
-    image=models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name="Фото")
-    category_id=models.ForeignKey('Category',on_delete=models.PROTECT, verbose_name="Категории")
+    image=models.ImageField(upload_to="images/%Y/%m/%d/", verbose_name="Фото")
+    category_id=models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Категории")
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+
+    @property
+    def image_url(self):
+        if self.image and hasattr(self.image, 'url'):
+            return self.image.url
 
     def ___str___(self):
         return self.title

@@ -11,10 +11,10 @@ class DataMixin:
 
     def get_user_context(self, **kwargs):
         context = kwargs
-        cats = cache.get('cats')
+        cats = cache.get('category_id')
         if not cats:
             cats = Category.objects.annotate(Count('money'))
-            cache.set('cats',cats, 60)
+            cache.set('category_id', cats, 60)
 
 
         context['cats'] = cats

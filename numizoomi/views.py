@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, FormView
 from rest_framework import generics, viewsets, mixins
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
@@ -73,7 +74,7 @@ class ShowPost(DataMixin, DetailView):
 class MoneyCategory(DataMixin, ListView):
     model = Money
     template_name = 'numizoomi/index.html'
-    context_object_name = 'moneys'
+    context_object_name = 'posts'
     allow_empty = False
 
     def get_queryset(self):
@@ -81,7 +82,7 @@ class MoneyCategory(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c = Category.objects.get(slug=self.kwargs['cat_slug'])
+        c = Category.objects.get(id=self.kwargs['category_id'])
         c_def = self.get_user_context(title='Категория - ' + str(c.name),
                                       cat_selected=c.pk)
         return dict(list(context.items()) + list(c_def.items()))
@@ -202,6 +203,11 @@ class MoneyViewSet(mixins.CreateModelMixin,
     def category(self, request, pk=None):
         cats = Category.objects.get(pk=pk)
         return Response({'cats': cats.name})
+
+class MoneyAPIListPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 class MoneyAPIList(generics.ListCreateAPIView):
     queryset = Money.objects.all()
