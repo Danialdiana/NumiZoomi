@@ -1,3 +1,4 @@
+import requests
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.forms import model_to_dict
@@ -5,6 +6,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidde
     HttpResponseServerError, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_POST, require_http_methods
 from django.views.generic import ListView, CreateView, DetailView, FormView
 from rest_framework import generics, viewsets, mixins
 from rest_framework.decorators import action
@@ -73,7 +75,7 @@ class ShowPost(DataMixin, DetailView):
 
 class MoneyCategory(DataMixin, ListView):
     model = Money
-    template_name = 'numizoomi/index.html'
+    template_name = 'numizoomi/show.html'
     context_object_name = 'posts'
     allow_empty = False
 
@@ -124,8 +126,7 @@ class AddMoney(LoginRequiredMixin, DataMixin, CreateView):
 #         form = AddPostForm()
 #     return render(request, 'numizoomi/addmoney.html', {'form': form, 'title': 'Добавить монеты'})
 def pageNotFound(request,exception):
-    return HttpResponseNotFound('<h1>Страница не найдена</h1>')
-
+    return HttpResponseNotFound('<h1 style="text-align:center;">Страница не найден</h1>')
 def pageForbidden(request,exception):
     return HttpResponseForbidden('<h1>Вам запрещено!!! У вас нет доступа</h1>')
 
@@ -166,7 +167,7 @@ class LoginUser(DataMixin, LoginView):
 
 def logout_user(request):
     logout(request)
-    return redirect('login')
+    return redirect('logiin')
 
 
 class ContactFormView(DataMixin, FormView):
@@ -205,7 +206,7 @@ class MoneyViewSet(mixins.CreateModelMixin,
         return Response({'cats': cats.name})
 
 class MoneyAPIListPagination(PageNumberPagination):
-    page_size = 2
+    page_size = 3
     page_size_query_param = 'page_size'
     max_page_size = 1000
 
@@ -214,13 +215,12 @@ class MoneyAPIList(generics.ListCreateAPIView):
     serializer_class = MoneySerializer
 
 
-class MoneyAPIUpdate(generics.UpdateAPIView):
+class MoneyAPIUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = Money.objects.all()
     serializer_class = MoneySerializer
     permission_classes = (IsOwnerOrReadOnly,)
 
-
-class MoneyAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+class MoneyAPIDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Money.objects.all()
     serializer_class = MoneySerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -265,3 +265,6 @@ class MoneyAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 class MoneyAPIView(generics.ListAPIView):
     queryset = Money.objects.all()
     serializer_class = MoneySerializer
+
+def admin():
+    return redirect('/admin/')

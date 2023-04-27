@@ -49,13 +49,13 @@
                 <div class="logo text-center">
                     <a href="#">
                         <!-- replace logo here -->
-                        <svg width="180px" height="29px" viewBox="0 0 140 29" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        <svg width="180px" height="28px" viewBox="0 0 140 29" version="1.1" xmlns="http://www.w3.org/2000/svg"
                              xmlns:xlink="http://www.w3.org/1999/xlink">
                             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" font-size="40"
                                font-family="AustinBold, Austin" font-weight="bold">
-                                <g id="Group" transform="translate(-110.000000, -297.000000)" fill="#000000">
+                                <g id="Group" transform="translate(-110.000000, -301.000000)" fill="#000000">
                                     <text id="AVIATO">
-                                        <tspan x="90.94" y="325">Нумизматика</tspan>
+                                        <tspan x="90.90" y="325">Нумизмат</tspan>
                                     </text>
                                 </g>
                             </g>
@@ -67,6 +67,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Right Side Of Navbar -->
                     <ul class="top-menu text-right list-inline">
+                            {% if request.user.is_authenticated and request.user.is_superuser%}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'admin' %}">Админ панель</a>
+                                </li>
+                            {% endif %}
                         <!-- Authentication Links -->
                             {% if request.user.is_authenticated %}
 
@@ -76,8 +81,11 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item btn" href="{% url 'logout' %}">
+                                    <a class="dropdown-item btn" href="{% url 'logoutt' %}">
                                        Выйти
+                                    </a>
+                                     <a class="dropdown-item btn" href="{% url 'rest' %}">
+                                       REST API
                                     </a>
 
                                 </div>
@@ -85,7 +93,7 @@
                             {% else %}
 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'login' %}">Логин</a>
+                                    <a class="nav-link" href="{% url 'logiin' %}">Логин</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
@@ -138,16 +146,19 @@
                                     <ul>
                                         <li class="dropdown-header">Категорий</li>
                                         {% getcats as cats %}
-
                                         {% show_categories %}
-
                                     </ul>
                                 </div>
                             </div><!-- / .row -->
                         </div><!-- / .dropdown-menu -->
                     </li><!-- / Elements -->
+                     {% if request.user.is_authenticated and request.user.is_superuser %}
                     <li class="dropdown ">
                         <a href="{% url 'add_money' %}">Добавить монеты</a>
+                    </li><!-- / Home -->
+                    {%endif%}
+                    <li class="dropdown ">
+                        <a href="{% url 'contact' %}">Контакты</a>
                     </li><!-- / Home -->
 
 

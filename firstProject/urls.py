@@ -21,7 +21,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from firstProject import settings
 from numizoomi.views import pageNotFound, pageForbidden, pageBadRequest, pageInternalServerError, MoneyAPIView, \
-    MoneyViewSet
+    MoneyViewSet,  MoneyAPIList, MoneyAPIUpdate, MoneyAPIDestroyView
 from django.urls import path, include
 
 class MyCustomRouter(routers.SimpleRouter):
@@ -47,10 +47,11 @@ urlpatterns = [
     path('', include('numizoomi.urls')),
     # path('api/v1/', include(router.urls))
     path('api/v1/drf-auth/', include('rest_framework.urls')),
-    path('api/v1/moneylist/', MoneyViewSet.as_view({'get': 'list'})),
-    path('api/v1/moneylist/<int:pk>/', MoneyViewSet.as_view({'put': 'update'})),
+    path('api/v1/money/', MoneyAPIList.as_view(), name = 'rest'),
+    path('api/v1/money/<int:pk>/', MoneyAPIUpdate.as_view()),
+    path('api/v1/moneydestroy/<int:pk>/', MoneyAPIDestroyView.as_view()),
     path('api/v1/auth/', include('djoser.urls')),
-    re_path(r'^auth', include('djoser.urls.authtoken')),
+    re_path(r'^auth', include('djoser.urls.authtoken'), name='auth'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),

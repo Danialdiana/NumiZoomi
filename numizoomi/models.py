@@ -19,6 +19,7 @@ class Money(models.Model):
     category_id=models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Категории")
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
 
+
     @property
     def image_url(self):
         if self.image and hasattr(self.image, 'url'):

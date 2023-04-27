@@ -1,6 +1,21 @@
 {% extends 'numizoomi/layout.html' %}
 
 {% block content %}
+<section class="page-header">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="content">
+					<h1 class="#">{{money.title}}</h1>
+					<ol class="breadcrumb">
+						<li><a href="{% url 'home' %}">Главная страница</a></li>
+						<li class="active">{{money.title}}</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 <<div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -23,11 +38,11 @@
                                         <h5 class="card-text text-muted">Количества:______________________________________<b>{{money.count}}</b></h5>
                                     </div>
                                 </div>
-                            <div class="card-footer justify-content-around">
-                                <a href="{% url 'home' %}" class="btn btn-main pull-right mb-3">Главная страница</a>
-                            </div>
                             </div>
                     </div>
+                        <div class="container" style="margin-top:100px;margin-left:500px;">
+                                <a href="{% url 'home' %}" class="btn btn-main  mb-3">Главная страница</a>
+                        </div>
                 </div>
 			</div>
 		</div>
